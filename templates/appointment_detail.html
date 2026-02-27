@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Appointment Details{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <div>
+      <h5 class="mb-0">Appointment Details</h5>
+      <small class="text-muted">{{ appointment.scheduled_at }} — {{ appointment.doctor.user.get_full_name }}</small>
+    </div>
+    <div>
+      <a class="btn btn-sm btn-danger" href="/appointments/{{ appointment.id }}/cancel/">Cancel</a>
+    </div>
+  </div>
+  <div class="card-body">
+    <p><strong>Patient:</strong> {{ appointment.patient.user.get_full_name }}</p>
+    <p><strong>Reason:</strong> {{ appointment.reason|default:'—' }}</p>
+
+    {% if appointment.prescription %}
+      <hr>
+      <h6>Prescription</h6>
+      <p>{{ appointment.prescription.medication }}</p>
+      <p class="text-muted">{{ appointment.prescription.notes }}</p>
+    {% else %}
+      <a class="btn btn-primary" href="/appointments/{{ appointment.id }}/prescription/create/">Add Prescription</a>
+    {% endif %}
+
+    {% if appointment.invoice %}
+      <hr>
+      <h6>Invoice</h6>
+      <p>Amount: {{ appointment.invoice.amount }}</p>
+      <p>Status: {% if appointment.invoice.paid %}<span class="badge bg-success">Paid</span>{% else %}<span class="badge bg-warning">Pending</span>{% endif %}</p>
+    {% else %}
+      <a class="btn btn-secondary" href="/appointments/{{ appointment.id }}/invoice/create/">Create Invoice</a>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}

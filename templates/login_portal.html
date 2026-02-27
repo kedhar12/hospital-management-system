@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block title %}Login Portal - Choose Your Portal{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <!-- Header -->
+    <div class="row mb-5 text-center">
+        <div class="col-12">
+            <h1 class="display-4 mb-3 fw-bold">ApolloCare Login Portal</h1>
+            <p class="lead text-muted">Select your account type to continue</p>
+        </div>
+    </div>
+
+    <!-- Login Options -->
+    <div class="row g-4 justify-content-center">
+        <!-- Admin Login -->
+        <div class="col-md-5">
+            <div class="card border-0 shadow-sm h-100 login-card admin-card">
+                <div class="card-body text-center p-5">
+                    <div class="login-icon mb-4">
+                        <i class="bi bi-shield-lock" style="font-size: 3.5rem; color: #0d6efd;"></i>
+                    </div>
+                    <h4 class="card-title mb-3 fw-bold">Admin Login</h4>
+                    <p class="text-muted mb-4">
+                        Access the admin dashboard to manage doctors, patients, and appointments
+                    </p>
+                    <a href="{% url 'admin_login' %}" class="btn btn-primary btn-lg w-100">
+                        <i class="bi bi-arrow-right me-2"></i>Login as Admin
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Doctor Login -->
+        <div class="col-md-5">
+            <div class="card border-0 shadow-sm h-100 login-card doctor-card">
+                <div class="card-body text-center p-5">
+                    <div class="login-icon mb-4">
+                        <i class="bi bi-stethoscope" style="font-size: 3.5rem; color: #28a745;"></i>
+                    </div>
+                    <h4 class="card-title mb-3 fw-bold">Doctor Login</h4>
+                    <p class="text-muted mb-4">
+                        Access your doctor dashboard to view your patients and appointments
+                    </p>
+                    <a href="{% url 'doctor_login' %}" class="btn btn-success btn-lg w-100">
+                        <i class="bi bi-arrow-right me-2"></i>Login as Doctor
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 justify-content-center mt-4">
+        <!-- Patient Login -->
+        <div class="col-md-5">
+            <div class="card border-0 shadow-sm h-100 login-card patient-card">
+                <div class="card-body text-center p-5">
+                    <div class="login-icon mb-4">
+                        <i class="bi bi-heart-pulse" style="font-size: 3.5rem; color: #dc3545;"></i>
+                    </div>
+                    <h4 class="card-title mb-3 fw-bold">Patient Login</h4>
+                    <p class="text-muted mb-4">
+                        Access your patient dashboard to view your doctors and appointments
+                    </p>
+                    <a href="{% url 'patient_login' %}" class="btn btn-danger btn-lg w-100">
+                        <i class="bi bi-arrow-right me-2"></i>Login as Patient
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Guest Booking -->
+        <div class="col-md-5">
+            <div class="card border-0 shadow-sm h-100 login-card guest-card">
+                <div class="card-body text-center p-5">
+                    <div class="login-icon mb-4">
+                        <i class="bi bi-calendar-check" style="font-size: 3.5rem; color: #ffc107;"></i>
+                    </div>
+                    <h4 class="card-title mb-3 fw-bold">Book Appointment</h4>
+                    <p class="text-muted mb-4">
+                        Don't have an account? You can still book an appointment without logging in
+                    </p>
+                    <a href="{% url 'appointment_create' %}" class="btn btn-warning btn-lg w-100">
+                        <i class="bi bi-plus-circle me-2"></i>Book Appointment
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Info -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="alert alert-info border-0" role="alert">
+                <h6 class="alert-heading mb-2">
+                    <i class="bi bi-info-circle me-2"></i>Demo Credentials
+                </h6>
+                <small>
+                    <strong>Admin:</strong> username: admin | password: adminpass<br>
+                    <strong>Doctor Sample:</strong> username: doctor1 (or doctor2, doctor3, etc.)<br>
+                    <strong>Patient Sample:</strong> username: patient1 (or patient2, patient3, etc.)
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .login-card {
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .login-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .admin-card:hover {
+        border-color: #0d6efd;
+    }
+
+    .doctor-card:hover {
+        border-color: #28a745;
+    }
+
+    .patient-card:hover {
+        border-color: #dc3545;
+    }
+
+    .guest-card:hover {
+        border-color: #ffc107;
+    }
+
+    .login-icon {
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}

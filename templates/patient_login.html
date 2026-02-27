@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Patient Login{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <!-- Back Button -->
+            <div class="mb-3">
+                <a href="{% url 'login_portal' %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Login Portal
+                </a>
+            </div>
+
+            <!-- Patient Login Card -->
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <!-- Header -->
+                    <div class="text-center mb-4">
+                        <div style="font-size: 3rem; color: #dc3545; margin-bottom: 1rem;">
+                            <i class="bi bi-heart-pulse"></i>
+                        </div>
+                        <h3 class="card-title fw-bold">Patient Login</h3>
+                        <p class="text-muted small">Access your health profile and appointments</p>
+                    </div>
+
+                    <!-- Error Messages -->
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                <i class="bi bi-exclamation-circle me-2"></i>
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <!-- Login Form -->
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="username" class="form-label fw-bold">
+                                <i class="bi bi-person-fill me-2"></i>Username
+                            </label>
+                            <input 
+                                type="text" 
+                                id="username"
+                                name="username" 
+                                class="form-control form-control-lg" 
+                                placeholder="Enter your patient username"
+                                required
+                            >
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label fw-bold">
+                                <i class="bi bi-lock-fill me-2"></i>Password
+                            </label>
+                            <input 
+                                type="password" 
+                                id="password"
+                                name="password" 
+                                class="form-control form-control-lg" 
+                                placeholder="Enter your password"
+                                required
+                            >
+                        </div>
+
+                        <button type="submit" class="btn btn-danger btn-lg w-100 fw-bold">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                        </button>
+                    </form>
+
+                    <!-- Footer -->
+                    <div class="text-center mt-4 pt-3 border-top">
+                        <p class="small text-muted mb-2">Don't have an account?</p>
+                        <a href="{% url 'appointment_create' %}" class="small link-danger text-decoration-none fw-bold">
+                            Book an appointment without login
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demo Info -->
+            <div class="alert alert-danger mt-4 border-0">
+                <small class="d-block mb-2">
+                    <strong><i class="bi bi-info-circle me-2"></i>Demo Patient Accounts:</strong>
+                </small>
+                <small class="d-block">Username: <code>patient1</code>, <code>patient2</code>, <code>patient3</code> ... <code>patient20</code></small>
+                <small>Password: Same as username</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 15px;
+    }
+
+    .form-control:focus {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+
+    .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1rem rgba(220, 53, 69, 0.4);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Create Invoice{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="card-header"><h5>Create Invoice for {{ appointment }}</h5></div>
+  <div class="card-body">
+    <form method="post">{% csrf_token %}
+      <div class="mb-3">{{ form.amount.label_tag }}{{ form.amount }}</div>
+      <div class="mb-3 form-check">{{ form.paid }} {{ form.paid.label_tag }}</div>
+      <button class="btn btn-primary">Create</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

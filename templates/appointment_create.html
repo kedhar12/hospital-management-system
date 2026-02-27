@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% block title %}Book Appointment{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <!-- Header -->
+            <div class="mb-4">
+                <h1 class="display-5 mb-2">
+                    <i class="bi bi-calendar-plus text-primary me-2"></i>Book an Appointment
+                </h1>
+                <p class="text-muted">Choose a doctor and select your preferred date and time</p>
+            </div>
+
+            <!-- Information Alert -->
+            {% if not user.is_authenticated %}
+            <div class="alert alert-info border-0 mb-4" role="alert">
+                <i class="bi bi-info-circle me-2"></i>
+                <strong>Good news!</strong> You can book an appointment without having an account. Just provide your contact information below.
+            </div>
+            {% else %}
+            <div class="alert alert-success border-0 mb-4" role="alert">
+                <i class="bi bi-check-circle me-2"></i>
+                <strong>Logged in as:</strong> {{ user.get_full_name }} ({{ user.email }})
+            </div>
+            {% endif %}
+
+            <!-- Appointment Form Card -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <!-- Authenticated User Section -->
+                        {% if user.is_authenticated %}
+                        <div class="alert alert-light border mb-4">
+                            <h6 class="mb-3 fw-bold">Your Information</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <small class="text-muted d-block">Name</small>
+                                    <p class="mb-0"><strong>{{ user.get_full_name }}</strong></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="text-muted d-block">Email</small>
+                                    <p class="mb-0"><strong>{{ user.email }}</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <!-- Anonymous User Fields -->
+                        <div class="mb-3">
+                            <label for="patient_name" class="form-label fw-bold">
+                                <i class="bi bi-person-fill me-2"></i>Your Full Name
+                            </label>
+                            <input 
+                                type="text" 
+                                id="patient_name"
+                                name="patient_name" 
+                                class="form-control form-control-lg" 
+                                placeholder="Enter your full name"
+                                required
+                            >
+                            <small class="text-muted d-block mt-1">This will be used to identify you in our system</small>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="patient_email" class="form-label fw-bold">
+                                <i class="bi bi-envelope-fill me-2"></i>Email Address
+                            </label>
+                            <input 
+                                type="email" 
+                                id="patient_email"
+                                name="patient_email" 
+                                class="form-control form-control-lg" 
+                                placeholder="Enter your email address"
+                                required
+                            >
+                            <small class="text-muted d-block mt-1">We'll use this to confirm your appointment</small>
+                        </div>
+                        {% endif %}
+
+                        <!-- Doctor Selection -->
+                        <div class="mb-4">
+                            <label for="id_doctor" class="form-label fw-bold">
+                                <i class="bi bi-stethoscope me-2"></i>Select Doctor
+                            </label>
+                            {{ form.doctor }}
+                            {% if form.doctor.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.doctor.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Date & Time -->
+                        <div class="mb-4">
+                            <label for="id_scheduled_at" class="form-label fw-bold">
+                                <i class="bi bi-calendar-event me-2"></i>Date & Time
+                            </label>
+                            {{ form.scheduled_at }}
+                            {% if form.scheduled_at.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.scheduled_at.errors }}
+                                </div>
+                            {% endif %}
+                            <small class="text-muted d-block mt-1">Select when you want to meet the doctor</small>
+                        </div>
+
+                        <!-- Reason -->
+                        <div class="mb-4">
+                            <label for="id_reason" class="form-label fw-bold">
+                                <i class="bi bi-chat-dots me-2"></i>Reason for Visit
+                            </label>
+                            {{ form.reason }}
+                            {% if form.reason.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.reason.errors }}
+                                </div>
+                            {% endif %}
+                            <small class="text-muted d-block mt-1">Tell us why you're visiting (optional)</small>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">
+                            <i class="bi bi-check-circle me-2"></i>Book Appointment
+                        </button>
+                    </form>
+
+                    <!-- Help Text -->
+                    <div class="text-center mt-4 pt-3 border-top">
+                        <p class="small text-muted mb-2">
+                            Haven't decided which doctor yet?
+                        </p>
+                        <a href="{% url 'doctors_list' %}" class="small link-primary text-decoration-none fw-bold">
+                            <i class="bi bi-search me-1"></i>Browse our doctors
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips Section -->
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold mb-3">
+                        <i class="bi bi-lightbulb text-warning me-2"></i>Booking Tips
+                    </h6>
+                    <ul class="small text-muted mb-0">
+                        <li class="mb-2">Choose a time that works best for you</li>
+                        <li class="mb-2">Provide detailed reason for better consultation</li>
+                        <li class="mb-2">A confirmation will be sent to your email</li>
+                        <li>You can cancel anytime before the appointment</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #id_doctor,
+    #id_scheduled_at,
+    #id_reason {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+
+    #id_doctor:focus,
+    #id_scheduled_at:focus,
+    #id_reason:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        outline: none;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1rem rgba(13, 110, 253, 0.4);
+    }
+</style>
+{% endblock %}

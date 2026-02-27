@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Appointments{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="mb-0">Appointments</h2>
+  <a class="btn btn-primary" href="/appointments/create/">New Appointment</a>
+</div>
+
+{% if appointments %}
+<table class="table table-hover align-middle">
+  <thead class="table-light">
+    <tr>
+      <th>When</th>
+      <th>Doctor</th>
+      <th>Patient</th>
+      <th class="text-end">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for appt in appointments %}
+      <tr>
+        <td>{{ appt.scheduled_at }}</td>
+        <td>{{ appt.doctor.user.get_full_name }}</td>
+        <td>{{ appt.patient.user.get_full_name }}</td>
+        <td class="text-end">
+          <a href="/appointments/{{ appt.id }}/" class="btn btn-sm btn-outline-secondary">View</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="alert alert-info">No appointments scheduled.</div>
+{% endif %}
+
+{% endblock %}

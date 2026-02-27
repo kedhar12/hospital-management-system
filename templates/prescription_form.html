@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Add Prescription{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="card-header"><h5>Add Prescription for {{ appointment }}</h5></div>
+  <div class="card-body">
+    <form method="post">{% csrf_token %}
+      <div class="mb-3">{{ form.medication.label_tag }}{{ form.medication }}</div>
+      <div class="mb-3">{{ form.notes.label_tag }}{{ form.notes }}</div>
+      <button class="btn btn-primary">Save</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Cancel Appointment{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center p-5">
+          <i class="bi bi-exclamation-triangle-fill text-warning fs-1 d-block mb-3"></i>
+          <h4 class="card-title mb-3">Cancel Appointment</h4>
+          <p class="text-muted mb-4">
+            Are you sure you want to cancel your appointment scheduled for:<br>
+            <strong class="text-dark">{{ appointment.scheduled_at|date:"M d, Y at H:i" }}</strong>
+          </p>
+          <p class="small text-muted mb-4">
+            This action cannot be undone. Please contact us if you need to reschedule instead.
+          </p>
+          
+          <form method="post" class="d-flex gap-2 justify-content-center">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">
+              <i class="bi bi-trash me-2"></i>Yes, Cancel Appointment
+            </button>
+            <a href="{% url 'appointment_list' %}" class="btn btn-secondary">
+              <i class="bi bi-x-circle me-2"></i>No, Go Back
+            </a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

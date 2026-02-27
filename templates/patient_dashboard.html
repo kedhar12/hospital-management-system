@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+{% block title %}Patient Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-5">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="display-4 mb-2">Welcome, {{ patient.user.get_full_name }}</h1>
+                    <p class="text-muted">Your health is our priority</p>
+                </div>
+                <div>
+                    <i class="bi bi-heart-pulse fs-1 text-danger opacity-25"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Information Cards -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-2">Your Doctor(s)</h6>
+                            <h3 class="mb-0">{{ doctors.count }}</h3>
+                            <small class="text-success">Assigned specialist(s)</small>
+                        </div>
+                        <i class="bi bi-stethoscope fs-2 ms-auto text-primary opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-2">Appointments</h6>
+                            <h3 class="mb-0">{{ total_appointments }}</h3>
+                            <small class="text-warning">Scheduled sessions</small>
+                        </div>
+                        <i class="bi bi-calendar-event-fill fs-2 ms-auto text-warning opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- My Appointments -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="bi bi-calendar-check text-primary me-2"></i>
+                        My Appointments
+                    </h5>
+                    <span class="badge bg-primary">{{ total_appointments }}</span>
+                </div>
+                <div class="card-body p-0">
+                    {% if appointments %}
+                    <div class="list-group list-group-flush">
+                        {% for appt in appointments %}
+                        <a href="{% url 'appointment_detail' appt.id %}" class="list-group-item list-group-item-action p-4">
+                            <div class="row align-items-center">
+                                <div class="col-md-3">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-person-check-fill text-primary me-3 fs-4"></i>
+                                        <div>
+                                            <h6 class="mb-0">Dr. {{ appt.doctor.user.get_full_name }}</h6>
+                                            <small class="text-muted">{{ appt.doctor.specialty|default:"General" }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-calendar-fill text-warning me-2"></i>
+                                        <div>
+                                            <small class="text-muted d-block">Date & Time</small>
+                                            <strong>{{ appt.scheduled_at|date:"M d, Y - H:i" }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div>
+                                        <small class="text-muted d-block mb-1">Reason for visit</small>
+                                        <p class="mb-0">{{ appt.reason|truncatewords:4|default:"Not specified" }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 text-end">
+                                    {% if appt.prescription %}
+                                        <span class="badge bg-success">
+                                            <i class="bi bi-check-circle me-1"></i>
+                                            Completed
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-info">
+                                            <i class="bi bi-hourglass-split me-1"></i>
+                                            Upcoming
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="p-5 text-center text-muted">
+                        <i class="bi bi-inbox fs-1 opacity-50 d-block mb-3"></i>
+                        <h6 class="mb-2">No appointments yet</h6>
+                        <p class="small mb-3">Schedule your first appointment with our doctors</p>
+                        <a href="{% url 'appointment_create' %}" class="btn btn-primary btn-sm">
+                            <i class="bi bi-plus-circle me-2"></i>Book Appointment
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- My Doctors -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="bi bi-stethoscope text-primary me-2"></i>
+                        Your Doctors
+                    </h5>
+                    <span class="badge bg-primary">{{ doctors.count }}</span>
+                </div>
+                <div class="card-body p-0">
+                    {% if doctors %}
+                    <div class="list-group list-group-flush">
+                        {% for doctor in doctors %}
+                        <a href="{% url 'doctor_detail' doctor.id %}" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center py-3">
+                                <div class="avatar me-3">
+                                    <i class="bi bi-person-circle fs-3 text-primary"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-0">
+                                        <i class="bi bi-award-fill text-warning me-1"></i>
+                                        Dr. {{ doctor.user.get_full_name }}
+                                    </h6>
+                                    <small class="text-muted d-block">
+                                        <i class="bi bi-briefcase me-1"></i>
+                                        {{ doctor.specialty|default:"General Practice" }}
+                                    </small>
+                                    <small class="text-muted">
+                                        <i class="bi bi-envelope me-1"></i>
+                                        {{ doctor.user.email }}
+                                    </small>
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="p-4 text-center text-muted">
+                        <i class="bi bi-person-fill fs-1 opacity-50 d-block mb-2"></i>
+                        <p class="small">Book an appointment to meet a doctor</p>
+                        <a href="{% url 'appointment_create' %}" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-plus-circle me-1"></i>Book Now
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'appointment_create' %}" class="btn btn-primary">
+                            <i class="bi bi-plus-circle me-2"></i>
+                            Book New Appointment
+                        </a>
+                        <a href="{% url 'doctors_list' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-search me-2"></i>
+                            Browse All Doctors
+                        </a>
+                        <a href="{% url 'appointment_list' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-list-check me-2"></i>
+                            View All Appointments
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: all 0.3s ease;
+    }
+    .card:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+    .list-group-item {
+        border-left: 4px solid transparent;
+        transition: all 0.3s ease;
+    }
+    .list-group-item:hover {
+        border-left-color: #0d6efd;
+        background-color: #f8f9fa;
+    }
+    .avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+</style>
+{% endblock %}

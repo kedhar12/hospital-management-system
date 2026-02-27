@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Doctor Profile{% endblock %}
+{% block content %}
+<div class="mb-3"><a href="/doctors/" class="btn btn-outline-secondary btn-sm">&laquo; Back to list</a></div>
+<div class="card">
+  <div class="card-body">
+    <h4>Dr. {{ doctor.user.get_full_name }}</h4>
+    <p><strong>Specialty:</strong> {{ doctor.specialty }}</p>
+    <p><a href="mailto:{{ doctor.user.email }}">{{ doctor.user.email }}</a></p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<!-- Hero -->
+<section class="py-5 mb-4 hero bg-light rounded-4">
+	<div class="row align-items-center">
+		<div class="col-md-6">
+			<h1 class="display-5 fw-bold">Comprehensive Healthcare, Close to You</h1>
+			
+			{% if user.is_authenticated and user.role == 'admin' %}
+				<!-- Admin Section -->
+				<p class="lead text-muted">Welcome Admin! Manage doctors, patients, and appointments from your dashboard.</p>
+				<a class="btn btn-primary btn-lg me-2" href="/dashboard/">Go to Dashboard</a>
+				<a class="btn btn-outline-secondary btn-lg" href="/patients/">View Patients</a>
+			{% elif user.is_authenticated and user.role == 'doctor' %}
+				<!-- Doctor Section -->
+				<p class="lead text-muted">Welcome Doctor! View your patients and appointments.</p>
+				<a class="btn btn-success btn-lg me-2" href="/dashboard/">Go to Dashboard</a>
+				<a class="btn btn-outline-secondary btn-lg" href="/patients/">My Patients</a>
+			{% else %}
+				<!-- Patient & Guest Section -->
+				<p class="lead text-muted">Book appointments with top doctors, manage prescriptions and invoices, and access your health records online.</p>
+            {% comment %} Show booking button for guests or patients only. {% endcomment %}
+            {% if not user.is_authenticated or user.role == 'patient' %}
+            <a class="btn btn-primary btn-lg me-2" href="/appointments/create/">Book Appointment</a>
+            {% endif %}
+				<a class="btn btn-outline-secondary btn-lg" href="/doctors/">Find Doctors</a>
+			{% endif %}
+		</div>
+		<div class="col-md-6 text-center">
+			<img src="https://via.placeholder.com/520x320.png?text=Healthcare" alt="Healthcare" class="img-fluid rounded">
+		</div>
+	</div>
+</section>
+
+<!-- Services -->
+<section class="mb-5">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm text-center py-4">
+                <div class="card-body">
+                    <i class="bi bi-telephone-fill display-6 text-primary"></i>
+                    <h5 class="card-title mt-3">24/7 Emergency</h5>
+                    <p class="card-text text-muted">Round-the-clock emergency services with fast response teams.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm text-center py-4">
+                <div class="card-body">
+                    <i class="bi bi-people-fill display-6 text-primary"></i>
+                    <h5 class="card-title mt-3">Experienced Doctors</h5>
+                    <p class="card-text text-muted">Specialists across all major disciplines to care for you.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm text-center py-4">
+                <div class="card-body">
+                    <i class="bi bi-phone-vibrate-fill display-6 text-primary"></i>
+                    <h5 class="card-title mt-3">Telemedicine</h5>
+                    <p class="card-text text-muted">Consult with doctors online from the comfort of your home.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured doctors -->
+<section>
+	<h3 class="mb-3">Featured Doctors</h3>
+	<div class="row">
+		{% for doc in doctors %}
+			<div class="col-md-3">
+				<div class="card mb-3">
+					<img src="https://via.placeholder.com/320x180.png?text=Doctor" class="card-img-top" alt="Doctor">
+					<div class="card-body">
+						<h6 class="card-title">Dr. {{ doc.user.get_full_name }}</h6>
+						<p class="text-muted small">{{ doc.specialty }}</p>
+						<a href="/doctors/{{ doc.id }}/" class="btn btn-sm btn-outline-primary">View Profile</a>
+					</div>
+				</div>
+			</div>
+		{% empty %}
+			<div class="col-12"><div class="alert alert-info">No featured doctors available.</div></div>
+		{% endfor %}
+	</div>
+</section>
+
+{% endblock %}

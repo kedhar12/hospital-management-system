@@ -1,0 +1,10 @@
+Django>=4.2
+djangorestframework
+djangorestframework-simplejwt
+psycopg2-binary
+redis
+django-redis
+gunicorn
+whitenoise
+dj-database-url
+celery
